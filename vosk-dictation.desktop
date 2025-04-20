@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=VOSK Dictation
+Comment=Говоришь голосом, получаешь текст!
+Exec=AppRun
+Icon=icon
+Type=Application
+Categories=Utility;
