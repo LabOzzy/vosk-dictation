@@ -34,7 +34,7 @@
 
 AppImage содержит всё:
 - Python
-- Модель
+- Модель: vosk-model-small-ru-0.22 (русская, облегчённая)
 - Зависимости: `vosk`, `sounddevice`, `pynput`, `xdotool`, `pystray`, `Pillow`, `notify-send`, `paplay` и даже `libportaudio`.
 
 ---
