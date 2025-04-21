@@ -1,4 +1,4 @@
-https://github.com/LabOzzy/vosk-dictation/releases/download/v1.0/VOSK_Dictation-x86_64.AppImage
+https://github.com/LabOzzy/vosk-dictation/releases/tag/v1.1
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>com.labozzy.vosk-dictation</id>
@@ -23,7 +23,7 @@ https://github.com/LabOzzy/vosk-dictation/releases/download/v1.0/VOSK_Dictation-
   <developer_name>Ozzy</developer_name>
   <project_license>MIT</project_license>
   <url type="homepage">https://github.com/LabOzzy/vosk-dictation</url>
- <url type="downloads">https://github.com/LabOzzy/vosk-dictation/releases/download/v1.0/VOSK_Dictation-x86_64.AppImage</url>
+ <url type="downloads">https://github.com/LabOzzy/vosk-dictation/releases/tag/v1.1</url>
   <url type="bugtracker">https://github.com/LabOzzy/vosk-dictation/issues</url>
   <url type="donation">mailto:billkodji1@gmail.com</url>
 <releases>
@@ -40,7 +40,7 @@ https://github.com/LabOzzy/vosk-dictation/releases/download/v1.0/VOSK_Dictation-
     </description>
   </release>
 </releases>
-  <url type="downloads">https://github.com/LabOzzy/vosk-dictation/releases/download/v1.0/VOSK_Dictation-x86_64.AppImage</url>
+  <url type="downloads">https://github.com/LabOzzy/vosk-dictation/releases/tag/v1.1</url>
   <content_rating type="oars-1.1"/>
   <keywords>
     <keyword>vosk</keyword>
