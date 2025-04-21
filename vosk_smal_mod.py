@@ -31,19 +31,32 @@ stream = None
 pressed_time = None
 
 def notify(msg):
-    subprocess.Popen(["paplay", os.path.join(APPDIR, "dialog-information.ogg")])
-    subprocess.run([
-        NOTIFY_SEND, "--app-name=VOSK", "--urgency=normal",
-        "--hint=string:x-canonical-private-synchronous:vosk", msg
-    ])
+    try:
+        subprocess.Popen(["paplay", os.path.join(APPDIR, "dialog-information.ogg")])
+    except Exception as e:
+        print(f"[WARN] Звук: {e}")
+    try:
+        subprocess.run([
+            NOTIFY_SEND, "--app-name=VOSK", "--urgency=normal",
+            "--hint=string:x-canonical-private-synchronous:vosk", msg
+        ])
+    except Exception as e:
+        print(f"[WARN] notify-send: {e}")
 
 def notify_startup():
-    subprocess.Popen(["paplay", os.path.join(APPDIR, "dialog-information.ogg")])
-    subprocess.run([
-        NOTIFY_SEND, "--app-name=VOSK", "--urgency=normal",
-        "--icon=dialog-information",
-        "✅ VOSK Dictation запущен"
-    ])
+    try:
+        subprocess.Popen(["paplay", os.path.join(APPDIR, "dialog-information.ogg")])
+    except Exception as e:
+        print(f"[WARN] Звук: {e}")
+    try:
+        subprocess.run([
+            NOTIFY_SEND, "--app-name=VOSK", "--urgency=normal",
+            "--icon=dialog-information",
+            "✅ VOSK Dictation запущен"
+        ])
+    except Exception as e:
+        print(f"[WARN] notify-send: {e}")
+
 
 def audio_callback(indata, frames, time_, status_):
     if status_:
@@ -129,10 +142,12 @@ def on_stop(icon, item):
     os._exit(0)
 
 def run_tray():
+    from pystray._gtk import Icon as GtkIcon  # 💡 Принудительно используем Gtk-бэкенд
+
     icon_path = os.path.join(APPDIR, "icon.png")
     image = Image.open(icon_path)
 
-    icon = Icon("VOSK", image, menu=Menu(
+    icon = GtkIcon("VOSK", image, menu=Menu(
         MenuItem("Остановить", on_stop, default=True)
     ))
 
