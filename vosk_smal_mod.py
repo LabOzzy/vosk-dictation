@@ -1,4 +1,5 @@
 print("[Автозапуск] VOSK диктовка активирована")
+
 import os, json, queue, time, threading, subprocess, sys, signal
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
@@ -6,7 +7,18 @@ from pynput import keyboard
 from pystray import Icon, Menu, MenuItem
 from PIL import Image
 
+# 📌 ДОБАВЛЕНО для поддержки GTK3 через PyGObject внутри AppImage
 APPDIR = os.path.dirname(os.path.abspath(__file__))
+os.environ["GI_TYPELIB_PATH"] = os.path.join(APPDIR, "usr", "lib", "girepository-1.0")
+os.environ["LD_LIBRARY_PATH"] = os.path.join(APPDIR, "usr", "lib") + ":" + os.environ.get("LD_LIBRARY_PATH", "")
+
+# 📌 ДОБАВЛЕНО: путь к notify-send внутри AppImage
+NOTIFY_SEND = os.path.join(APPDIR, "usr", "bin", "notify-send")
+
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
+
 MODEL_PATH = os.path.join(APPDIR, "vosk-model-small-ru-0.22")
 SAMPLERATE = 16000
 TRIGGER_KEY = keyboard.Key.alt_l
@@ -21,14 +33,14 @@ pressed_time = None
 def notify(msg):
     subprocess.Popen(["paplay", os.path.join(APPDIR, "dialog-information.ogg")])
     subprocess.run([
-        "notify-send", "--app-name=VOSK", "--urgency=normal",
+        NOTIFY_SEND, "--app-name=VOSK", "--urgency=normal",
         "--hint=string:x-canonical-private-synchronous:vosk", msg
     ])
 
 def notify_startup():
     subprocess.Popen(["paplay", os.path.join(APPDIR, "dialog-information.ogg")])
     subprocess.run([
-        "notify-send", "--app-name=VOSK", "--urgency=normal",
+        NOTIFY_SEND, "--app-name=VOSK", "--urgency=normal",
         "--icon=dialog-information",
         "✅ VOSK Dictation запущен"
     ])
@@ -81,7 +93,6 @@ def stop_and_process():
 
 def type_directly(text):
     print("[INFO] 🪄 Вставка текста...")
-    import time
     time.sleep(0.3)
     for chunk in [text[i:i+80] for i in range(0, len(text), 80)]:
         subprocess.run(["xdotool", "type", "--delay", "1", chunk])
