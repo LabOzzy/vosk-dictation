@@ -133,11 +133,17 @@ chmod +x VOSK_Dictation-x86_64.AppImage
 
 
 ##v1.1 — Расширение совместимости (второй релиз) 
+
 ✅ Ручное добавление всех GTK3 и GObject зависимостей для полной автономности 
+
 ✅ Включены .so и .typelib для libgtk, libgdk, libpango, libayatana-appindicator3, libX11 и пр. 
+
 ✅ Проверка через ldd, пересборка AppImage с полной изоляцией 
+
 ✅ Исправлена проблема Namespace Gtk not available на всех системах 
+
 ✅ Обновлён startup-код (экспорт LD_LIBRARY_PATH, GI_TYPELIB_PATH) 
+
 ✅ AppImage запускается на любом дистрибутиве, без FUSE, без внешних зависимостей 
 
 
