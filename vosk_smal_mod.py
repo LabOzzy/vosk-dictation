@@ -1,5 +1,10 @@
 print("[Автозапуск] VOSK диктовка активирована")
 
+# 📌 Меняем имя процесса, чтобы в системном мониторинге было "VOSK Dictation"
+import ctypes
+libc = ctypes.cdll.LoadLibrary("libc.so.6")
+libc.prctl(15, b"VOSK Dictation", 0, 0, 0)
+
 import os, json, queue, time, threading, subprocess, sys, signal
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
@@ -142,16 +147,36 @@ def on_stop(icon, item):
     os._exit(0)
 
 def run_tray():
-    from pystray._gtk import Icon as GtkIcon  # 💡 Принудительно используем Gtk-бэкенд
+    from gi.repository import Gtk, Gdk
+    icon = Gtk.StatusIcon()
+    icon.set_from_file(os.path.join(APPDIR, "icon.png"))
+    icon.set_visible(True)
 
-    icon_path = os.path.join(APPDIR, "icon.png")
-    image = Image.open(icon_path)
+    def on_left_click(icon):  # ЛКМ
+        print("[TRAY] ЛКМ — показать меню")
+        show_menu()
 
-    icon = GtkIcon("VOSK", image, menu=Menu(
-        MenuItem("Остановить", on_stop, default=True)
-    ))
+    def on_right_click(icon, button, time):  # ПКМ
+        print("[TRAY] ПКМ — показать меню")
+        show_menu(button, time)
 
-    icon.run()
+    def on_stop_action(menu_item):
+        print("[TRAY] ⛔ Остановка по кнопке")
+        Gtk.main_quit()
+        os._exit(0)
+
+    def show_menu(button=1, time=Gtk.get_current_event_time()):
+        menu = Gtk.Menu()
+        stop_item = Gtk.MenuItem(label="❌ Завершить")
+        stop_item.connect("activate", on_stop_action)
+        stop_item.show()
+        menu.append(stop_item)
+        menu.popup(None, None, None, None, button, time)
+
+    icon.connect("activate", on_left_click)           # ЛКМ
+    icon.connect("popup-menu", on_right_click)        # ПКМ
+
+    Gtk.main()
 
 keyboard.Listener(on_press=on_press, on_release=on_release).start()
 threading.Thread(target=run_tray, daemon=True).start()

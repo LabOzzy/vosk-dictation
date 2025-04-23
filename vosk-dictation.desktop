@@ -5,3 +5,5 @@ Exec=AppRun
 Icon=icon
 Type=Application
 Categories=Utility;
+StartupNotify=true
+Terminal=false
